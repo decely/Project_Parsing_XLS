@@ -1,20 +1,16 @@
 package com.example.parsing_xls;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.ss.util.CellReference;
 
 
 public class XlsReader {
-    public static void SearchEngine() throws IOException {
-        //Подключение к базе данных
-        DatabaseWriter.main();
+    public static List<outputCell> SearchEngine(String FileAddress) throws IOException {
 
         List<cellFinder> cellFinders = List.of(
                 new cellFinder(1, "E14", cellFinder.Type.TOWNNAME),
@@ -25,15 +21,15 @@ public class XlsReader {
                 new cellFinder(4,"K52", cellFinder.Type.NUMOFPROPERTY),
                 new cellFinder(4,"K66", cellFinder.Type.NUMOFTAXES)
         );
-        FileInputStream inputStream = new FileInputStream("D:\\Test\\Test2.xls");
-        Workbook workbook = null;
-        workbook = WorkbookFactory.create(inputStream);
+        List<outputCell> outputCells = new ArrayList<>();
+        FileInputStream inputStream = new FileInputStream(FileAddress);
 
-        //Начальное положение итератора листов
+        Workbook workbook;
+        workbook = WorkbookFactory.create(inputStream);
+        Workbook finalWorkbook = workbook;
 
         DataFormatter dataFormatter = new DataFormatter();
 
-        Workbook finalWorkbook = workbook;
         cellFinders.forEach(cellFinder -> {
             var x = finalWorkbook.getSheetAt(cellFinder.getSheet()-1);
             CellReference cellReference = new CellReference(cellFinder.getCellAdress());
@@ -44,19 +40,12 @@ public class XlsReader {
             System.out.print(cellValue);
 
             switch(cellFinder.getCelltype()){
-                case TOWNNAME -> {
-                    System.out.println(" - название населенного пункта");
-                }
-                case NUMOFPROPERTY -> {
-                    System.out.println(" - количество имущества, по которому предъявлен налог к уплате");
-                }
-                case NUMOFTAXES -> {
-                    System.out.println(" - сумма налога, подлежащая уплате в бюджет");
-                }
+                case TOWNNAME -> System.out.println(" - название населенного пункта");
+                case NUMOFPROPERTY -> System.out.println(" - количество имущества, по которому предъявлен налог к уплате");
+                case NUMOFTAXES -> System.out.println(" - сумма налога, подлежащая уплате в бюджет");
             }
-            DatabaseWriter.outputCells.add(new outputCell(cellFinder.getSheet(),cellFinder.getCellAdress(),cellValue,cellFinder.getCelltype()));
-            System.out.println("Successfully added cell to output");
+            outputCells.add(new outputCell(cellFinder.getSheet(),cellFinder.getCellAdress(),cellValue,cellFinder.getCelltype()));
         });
-        DatabaseWriter.QueryExecute();
+        return (outputCells);
     }
 }

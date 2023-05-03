@@ -5,6 +5,7 @@ module com.example.parsing_xls {
     requires java.security.jgss;
     requires org.apache.poi.ooxml;
     requires java.sql;
+    requires org.postgresql.jdbc;
 
 
     opens com.example.parsing_xls to javafx.fxml;
