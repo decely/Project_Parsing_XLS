@@ -1,8 +1,8 @@
 package com.example.parsing_xls;
 
-import javafx.collections.ObservableList;
-
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseWriter {
     //  Database credentials
@@ -10,8 +10,8 @@ public class DatabaseWriter {
     static final String USER = "postgres";
     static final String PASS = "123305";
     private static Connection con;
-    private static Statement stmt;
     private static ResultSet rs;
+    public static List<outputCell> outputCells = new ArrayList<>();
 
 
     //Подключение к базе данных
@@ -48,21 +48,21 @@ public class DatabaseWriter {
 
     //Выполнение запроса в базе данных
     public static void QueryExecute() {
-        try {
-            con = DriverManager.getConnection(DB_URL, USER, PASS);
 
-            stmt = con.createStatement();
 
-            String CreateQuery = "CREATE TABLE table_name (\n" +
-                    "    column1 varchar,\n" +
-                    "    column2 Integer,\n" +
-                    "    column3 varchar\n" +
-                    "); ";
+        outputCells.forEach(outputCell -> {
+            try {
+                con = DriverManager.getConnection(DB_URL, USER, PASS);
 
-            String FillQuery = "INSERT INTO table_name VALUES ('anna', 10, 'dog')";
-            rs = stmt.executeQuery(CreateQuery + FillQuery);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+                var stmt = con.createStatement();
+
+                System.out.println(outputCell.getCellValue());
+
+            String FillQuery = "INSERT INTO parsedxls VALUES ("+outputCell.getSheet()+", '"+outputCell.getCellAdress()+"', '"+outputCell.getCellValue()+"','"+outputCell.getCelltype()+"')";
+            rs = stmt.executeQuery(FillQuery);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

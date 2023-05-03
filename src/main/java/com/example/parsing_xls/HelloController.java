@@ -24,8 +24,8 @@ public class HelloController implements Initializable {
     }
 
     public void onWriteTestClick(ActionEvent actionEvent) {
-        DatabaseWriter.main();
-        DatabaseWriter.QueryExecute();
+        /*DatabaseWriter.main();
+        DatabaseWriter.QueryExecute();*/
     }
 
     @Override

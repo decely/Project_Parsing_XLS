@@ -13,35 +13,50 @@ import org.apache.poi.ss.util.CellReference;
 
 public class XlsReader {
     public static void SearchEngine() throws IOException {
+        //Подключение к базе данных
+        DatabaseWriter.main();
+
         List<cellFinder> cellFinders = List.of(
-                new cellFinder(1, "E14"),
-                new cellFinder(2, "C28"),
-                new cellFinder(2, "C36"),
-                new cellFinder(3,"C29"),
-                new cellFinder(3,"C37"),
-                new cellFinder(4,"K52"),
-                new cellFinder(4,"K66")
+                new cellFinder(1, "E14", cellFinder.Type.TOWNNAME),
+                new cellFinder(2, "C28", cellFinder.Type.NUMOFPROPERTY),
+                new cellFinder(2, "C36", cellFinder.Type.NUMOFTAXES),
+                new cellFinder(3,"C29", cellFinder.Type.NUMOFPROPERTY),
+                new cellFinder(3,"C37", cellFinder.Type.NUMOFTAXES),
+                new cellFinder(4,"K52", cellFinder.Type.NUMOFPROPERTY),
+                new cellFinder(4,"K66", cellFinder.Type.NUMOFTAXES)
         );
         FileInputStream inputStream = new FileInputStream("D:\\Test\\Test2.xls");
         Workbook workbook = null;
         workbook = WorkbookFactory.create(inputStream);
-        //Workbook workbook = new XSSFWorkbook(inputStream);
-        //Объявление итератора листов
-        Iterator<Sheet> sheetIterator = workbook.sheetIterator();
 
         //Начальное положение итератора листов
-        final Sheet[] sheet = {workbook.getSheetAt(0)};
 
         DataFormatter dataFormatter = new DataFormatter();
 
         Workbook finalWorkbook = workbook;
         cellFinders.forEach(cellFinder -> {
-            sheet[0] = finalWorkbook.getSheetAt(cellFinder.getSheet()-1);
+            var x = finalWorkbook.getSheetAt(cellFinder.getSheet()-1);
             CellReference cellReference = new CellReference(cellFinder.getCellAdress());
-            Row row = sheet[0].getRow(cellReference.getRow());
+            Row row = x.getRow(cellReference.getRow());
             Cell cell = row.getCell(cellReference.getCol());
             String cellValue = dataFormatter.formatCellValue(cell);
-            System.out.println(cellValue);
+
+            System.out.print(cellValue);
+
+            switch(cellFinder.getCelltype()){
+                case TOWNNAME -> {
+                    System.out.println(" - название населенного пункта");
+                }
+                case NUMOFPROPERTY -> {
+                    System.out.println(" - количество имущества, по которому предъявлен налог к уплате");
+                }
+                case NUMOFTAXES -> {
+                    System.out.println(" - сумма налога, подлежащая уплате в бюджет");
+                }
+            }
+            DatabaseWriter.outputCells.add(new outputCell(cellFinder.getSheet(),cellFinder.getCellAdress(),cellValue,cellFinder.getCelltype()));
+            System.out.println("Successfully added cell to output");
         });
+        DatabaseWriter.QueryExecute();
     }
 }
