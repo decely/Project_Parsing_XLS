@@ -1,14 +1,25 @@
 package com.example.parsing_xls;
 
 public class cellFinder {
+    private String FileAdress;
     private int Sheet;
     private String CellAdress;
     Type Celltype;
 
-    public cellFinder(int sheet, String cellAdress, Type type) {
+
+    public cellFinder(String fileAdress, int sheet, String cellAdress, Type type) {
+        FileAdress = fileAdress;
         Sheet = sheet;
         CellAdress = cellAdress;
         Celltype = type;
+    }
+
+    public String getFileAdress() {
+        return FileAdress;
+    }
+
+    public void setFileAdress(String fileAdress) {
+        FileAdress = fileAdress;
     }
 
     public Type getCelltype() {
