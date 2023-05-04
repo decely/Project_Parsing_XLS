@@ -57,7 +57,7 @@ public class XlsReader {
                     case NUMOFPROPERTY -> System.out.println(" - количество имущества, по которому предъявлен налог к уплате");
                     case NUMOFTAXES -> System.out.println(" - сумма налога, подлежащая уплате в бюджет");
                 }
-                outputCells.add(new outputCell(cellFinder.getSheet(), cellFinder.getCellAdress(), cellValue, cellFinder.getCelltype()));
+                outputCells.add(new outputCell(cellFinder.getFileAdress(),cellFinder.getSheet(), cellFinder.getCellAdress(), cellValue, cellFinder.getCelltype()));
             });
             System.out.println("\n" + filePath + " Read Successful \n");
         });

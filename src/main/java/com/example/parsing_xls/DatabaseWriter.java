@@ -10,7 +10,12 @@ public class DatabaseWriter {
 
         outputCells.forEach(outputCell -> {
             try {
-            String FillQuery = "INSERT INTO parsedxls VALUES ("+outputCell.getSheet()+", '"+outputCell.getCellAdress()+"', '"+outputCell.getCellValue()+"','"+outputCell.getCelltype()+"')";
+            String FillQuery = "INSERT INTO parsedxls VALUES ("
+                    +outputCell.getSheet()+",'"
+                    +outputCell.getCellAdress()+"','"
+                    +outputCell.getCellValue()+"','"
+                    +outputCell.getCelltype()+"','"
+                    +outputCell.getFileAdress()+"')";
             stmt.execute(FillQuery);
             System.out.println("Output cell "+outputCell.getCellValue()+ " added successfully");
             } catch (SQLException e) {
