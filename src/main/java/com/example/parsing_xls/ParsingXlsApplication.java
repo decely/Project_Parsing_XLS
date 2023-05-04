@@ -12,14 +12,14 @@ import static java.lang.System.exit;
 public class ParsingXlsApplication {
 
     public static void main(String[] args) throws IOException, SQLException {
-        List<inputCell> input = List.of(
-                new inputCell("D:\\Test\\Test2.xls",1, "E14", cellFinder.Type.TOWNNAME),
-                new inputCell("D:\\Test\\Test2.xls",2, "C28", cellFinder.Type.NUMOFPROPERTY),
-                new inputCell("D:\\Test\\Test2.xls",2, "C36", cellFinder.Type.NUMOFTAXES),
-                new inputCell("D:\\Test\\Test2.xls",3,"C29", cellFinder.Type.NUMOFPROPERTY),
-                new inputCell("D:\\Test\\Test2.xls",3,"C37", cellFinder.Type.NUMOFTAXES),
-                new inputCell("D:\\Test\\Test2.xls",4,"K52", cellFinder.Type.NUMOFPROPERTY),
-                new inputCell("D:\\Test\\ChildFolder\\Test3.xls",4,"K66", cellFinder.Type.NUMOFTAXES)
+        List<cellFinder> input = List.of(
+                new cellFinder(1, "E14", cellFinder.Type.TOWNNAME),
+                new cellFinder(2, "C28", cellFinder.Type.NUMOFPROPERTY),
+                new cellFinder(2, "C36", cellFinder.Type.NUMOFTAXES),
+                new cellFinder(3,"C29", cellFinder.Type.NUMOFPROPERTY),
+                new cellFinder(3,"C37", cellFinder.Type.NUMOFTAXES),
+                new cellFinder(4,"K52", cellFinder.Type.NUMOFPROPERTY),
+                new cellFinder(4,"K66", cellFinder.Type.NUMOFTAXES)
         );
         String folderPath = "D:\\Test\\";
         List<String> walkTree = walkFileTree.getWalkTree(folderPath);
@@ -31,10 +31,9 @@ public class ParsingXlsApplication {
         var con = postgrecon.getConnection();
         if (postgrecon.hasConnection()) {
             walkTree.forEach(x -> {
-                List<cellFinder> cellFinders = FormingCellFinder.form(input, x);
                 List<outputCell> outputCells = null;
                 try {
-                    outputCells = XlsReader.SearchEngine(new FileInputStream(x), cellFinders);
+                    outputCells = XlsReader.SearchEngine(new FileInputStream(x), input);
                     System.out.println("\n" + x + " Read Successful \n");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
