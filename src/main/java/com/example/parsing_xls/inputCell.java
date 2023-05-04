@@ -1,16 +1,24 @@
 package com.example.parsing_xls;
 
-public class outputCell {
+public class inputCell {
+    private String FileAdress;
     private int Sheet;
     private String CellAdress;
-    private String CellValue;
     cellFinder.Type Celltype;
 
-    public outputCell(int sheet, String cellAdress, String cellValue, cellFinder.Type celltype) {
+    public inputCell(String fileAdress, int sheet, String cellAdress, cellFinder.Type celltype) {
+        FileAdress = fileAdress;
         Sheet = sheet;
         CellAdress = cellAdress;
-        CellValue = cellValue;
         Celltype = celltype;
+    }
+
+    public String getFileAdress() {
+        return FileAdress;
+    }
+
+    public void setFileAdress(String fileAdress) {
+        FileAdress = fileAdress;
     }
 
     public int getSheet() {
@@ -29,13 +37,6 @@ public class outputCell {
         CellAdress = cellAdress;
     }
 
-    public String getCellValue() {
-        return CellValue;
-    }
-
-    public void setCellValue(String cellValue) {
-        CellValue = cellValue;
-    }
 
     public cellFinder.Type getCelltype() {
         return Celltype;

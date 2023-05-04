@@ -14,8 +14,7 @@ public class DatabaseWriter {
                     +outputCell.getSheet()+",'"
                     +outputCell.getCellAdress()+"','"
                     +outputCell.getCellValue()+"','"
-                    +outputCell.getCelltype()+"','"
-                    +outputCell.getFileAdress()+"')";
+                    +outputCell.getCelltype()+"')";
             stmt.execute(FillQuery);
             System.out.println("Output cell "+outputCell.getCellValue()+ " added successfully");
             } catch (SQLException e) {
